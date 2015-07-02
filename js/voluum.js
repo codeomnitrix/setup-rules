@@ -1,0 +1,457 @@
+/**
+ * 
+ */
+
+var Voluum = {
+
+	from : '2015-04-04T00:00:00Z',
+	to : '2015-05-04T00:00:00Z',
+	tz : 'Asia/Singapore',
+	campaigns : [],
+	filterType : [],
+	operatorType : [],
+	inputAVal : [],
+	inputBVal : [],
+
+	setFilterType : function(filterType) {
+		Voluum.filterType = filterType;
+	},
+
+	setOperatorType : function(operatorType) {
+		Voluum.operatorType = operatorType;
+	},
+
+	setInputAVal : function(inputAVal) {
+		Voluum.inputAVal = inputAVal;
+	},
+
+	setInputBVal : function(inputBVal) {
+		Voluum.inputBVal = inputBVal;
+	},
+
+	setTo : function() {
+		var to = $("input[name='toDate']").val();
+		Voluum.to = to;
+	},
+
+	setFrom : function() {
+		var from = $("input[name='fromDate']").val();
+		Voluum.from = from;
+	},
+
+	setTZ : function() {
+		var tz = $("select[name='tz'] option:selected").val();
+		Voluum.tz = tz
+	},
+
+	getEntity : function(params, successcb, errorcb) {
+		var data = {
+			from : Voluum.from,
+			to : Voluum.to,
+			tz : Voluum.tz,
+			sort : 'cost',
+			direction : 'desc',
+			limit : 100000
+		};
+		for (i in params)
+			data[i] = params[i];
+		return $.ajax({
+			url : 'reportDownloader.php?url=https://reports.voluum.com/report',
+			data : data,
+			success : successcb,
+			error : errorcb
+		});
+	},
+
+	getDataURI : function(data) {
+		var row = [], rows = [], csv = "";
+
+		for (i in data) {
+			var obj = data[i];
+			row = [];
+			for (j in obj) {
+				if (j != "hour")
+					row.push(obj[j]);
+			}
+			rows.push(row.join(','));
+		}
+		csv += rows.join('\n');
+		var dataURI = 'data:application/csv;charset=utf-8,'
+				+ encodeURIComponent(csv);
+		return dataURI;
+	},
+
+	getAvgAP : function(data) {
+		var sum = 0, rows = 0;
+		for (i in data) {
+			if (data[i].ap > 0) {
+				sum += data[i].ap
+				rows++;
+			}
+		}
+		return sum / rows;
+	},
+	// Filters the rows based on the filter selected
+	isValid : function(row, tAvgAP) {		
+		var retVal = true;
+		for(var i=0;i<Voluum.filterType.length;i++){
+			switch(Voluum.filterType[i]){
+			case "ROI":
+				switch(Voluum.operatorType[i]){
+				case "<": 
+					if(row.roi < Voluum.inputAVal[i]){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				case "<=":
+					if(row.roi <= Voluum.inputAVal[i]){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				case ">":
+					if(row.roi > Voluum.inputAVal[i]){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				case ">=":
+					if(row.roi >= Voluum.inputAVal[i]){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				}
+				break;
+			case "Profit":
+				switch(Voluum.operatorType[i]){
+				case "<": 
+					if(row.profit < Voluum.inputAVal[i]){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				case "<=":
+					if(row.profit <= Voluum.inputAVal[i]){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				case ">":
+					if(row.profit > Voluum.inputAVal[i]){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				case ">=":
+					if(row.profit >= Voluum.inputAVal[i]){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				}
+				break;
+			case "Revenue":
+				switch(Voluum.operatorType[i]){
+				case "<": 
+					if(row.revenue < Voluum.inputAVal[i]){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				case "<=":
+					if(row.revenue <= Voluum.inputAVal[i]){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				case ">":
+					if(row.revenue > Voluum.inputAVal[i]){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				case ">=":
+					if(row.revenue >= Voluum.inputAVal[i]){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				}
+				break;
+			case "Cost":				
+				switch(Voluum.operatorType[i]){
+				case "<": 
+					if(row.cost < Voluum.inputAVal[i]*(Voluum.inputBVal[i] == ""?tAvgAP:parseFloat(inputBVal[i]))){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				case "<=":
+					if(row.cost <= Voluum.inputAVal[i]*(Voluum.inputBVal[i] == ""?tAvgAP:parseFloat(inputBVal[i]))){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				case ">":
+					if(row.cost > Voluum.inputAVal[i]*(Voluum.inputBVal[i] == ""?tAvgAP:parseFloat(inputBVal[i]))){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				case ">=":
+					if(row.cost >= Voluum.inputAVal[i]*(Voluum.inputBVal[i] == ""?tAvgAP:parseFloat(inputBVal[i]))){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				}
+				break;
+			case "Visits":
+				switch(Voluum.operatorType[i]){
+				case "<": 
+					if(row.visits < Voluum.inputAVal[i]){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				case "<=":
+					if(row.visits <= Voluum.inputAVal[i]){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				case ">":
+					if(row.visits > Voluum.inputAVal[i]){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				case ">=":
+					if(row.visits >= Voluum.inputAVal[i]){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				}
+				break;
+			case "Clicks":
+				switch(Voluum.operatorType[i]){
+				case "<": 
+					if(row.clicks < Voluum.inputAVal[i]){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				case "<=":
+					if(row.clicks <= Voluum.inputAVal[i]){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				case ">":
+					if(row.clicks > Voluum.inputAVal[i]){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				case ">=":
+					if(row.clicks >= Voluum.inputAVal[i]){
+						continue;
+					}else{
+						retVal = false;
+						return retVal;
+					}
+					break;
+				}
+				break;
+			}
+		}
+		return retVal;
+	},
+
+	filter : function(data) {
+		var out = [], avgAP = Voluum.getAvgAP(data), blank = {
+			x : "-"
+		};
+		console.log(avgAP);
+		if (0 < data.length) {
+			row = {};
+			for (i in data[0]) {
+				if (i != "hour" && i != "advertiserCost"
+						&& i != "combinedConversions"
+						&& i != "customConversions1" && i != "impressions")
+					row[i] = i.toUpperCase();
+			}
+			out.push(row);
+		}
+		for (i in data) {
+			delete data[i].impressions;
+			delete data[i].advertiserCost;
+			delete data[i].combinedConversions;
+			delete data[i].customConversions1;
+			if (Voluum.isValid(data[i], avgAP)) {
+				out.push(data[i]);
+			}
+
+		}
+		for (var i = 0; i < 5; i++)
+			out.push(blank);
+		return out;
+	},
+
+	process : function(holder, data) {
+		if (data.rows != undefined) {
+			var filtered = Voluum.filter(data.rows);
+			for (i in filtered)
+				holder.push(filtered[i]);
+		}
+
+	},
+	fetchCustomCampaignReport : function(campaign, customVariable, holder) {
+		var v = customVariable;
+		return Voluum.getEntity({
+			columns : [ v ],
+			groupBy : v,
+			include : 'active',
+			filter1 : 'campaign',
+			filter1Value : campaign
+		}, function(data) {
+			data = JSON.parse(data);
+			Voluum.process(holder, data);
+		}, function(err) {
+			console.log("Loading custom variable report failed");
+			console.log(err);
+		});
+	},
+
+	fetchCampaignReport : function(campaignname, campaignid,
+			customvariablename, customVariableind, dateFrom, dateTo, tz, cb) {
+		var filteredData = [ [ "Campaign Name", campaignname ],
+				[ "Campaign ID", campaignid ],
+				[ "Custom Variable", customvariablename ],
+				[ "Date From", dateFrom ], [ "Date To", dateTo ], [ "-" ],
+				[ "-" ], [ "-" ], [ "-" ] ];
+
+		// var def = Voluum.fetchDefaultCampaignReports(campaignid,
+		// filteredData);
+		var all = [];
+		for (i in customVariableind) {
+			var c = Voluum.fetchCustomCampaignReport(campaignid,
+					customVariableind[i], filteredData);
+			all.push(c);
+		}
+
+		return $.when.apply($, all).done(
+				function() {
+					var dataURI = Voluum.getDataURI(filteredData);
+					cb(campaignname, campaignid, customvariablename,
+							customVariableind, dateFrom, dateTo, tz, dataURI);
+				});
+	},
+	getReportsRec : function(campaigns, customVariableInd, customVariableName,
+			dateFrom, dateTo, tz) {
+		if (campaigns.length) {
+			var campaign = campaigns.shift();
+			var ct = campaigns.length;
+			Voluum.fetchReport(campaign, campaign, customVariableInd,
+					customVariableName, dateFrom, dateTo, tz).done(function(){
+					Voluum.getReportsRec(campaigns, customVariableInd,
+							customVariableName, dateFrom, dateTo, tz);}).always(
+					function() {
+
+					});
+		}
+	},
+
+	fetchReport : function(campaignId, campaignName, customVariableInd,
+			customVariableName, dateFrom, dateTo, tz) {
+		return Voluum
+				.fetchCampaignReport(
+						campaignName,
+						campaignId,
+						customVariableName,
+						customVariableInd,
+						dateFrom,
+						dateTo,
+						tz,
+						function(campaignName, campaignId, customVariableName,
+								customVariableInd, dateFrom, dateTo, tz, uri) {
+							var $d = $("<div>", {
+								class : "list-group-item"
+							});
+
+							$("#reports").append($d);
+
+							$d.append($("<span>", {
+								text : campaignName + " " + customVariableName
+										+ " " + dateFrom + " to " + dateTo
+										+ " "
+							}));
+
+							$d
+									.append($(
+											"<a>",
+											{
+												href : uri,
+												html : '<span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Download CSV',
+												download : campaignName + "_"
+														+ customVariableName
+														+ "_" + dateFrom + "to"
+														+ dateTo + ".csv",
+												class : "btn btn-success",
+											}));
+						}).fail(function() {
+					/* $("#get-reports-panel").addClass("get-reports-failed"); */
+					alert("Get Reports failed");
+				});// .always(enableAllButtons());
+	}
+
+};

@@ -1,0 +1,58 @@
+<?php ?>
+<div class="row">
+	<div class="col-md-3">
+		<select class="form-control filterType" ng-modal="filterOperator{{counter}}">
+			<option value="-1">--Select One--</option>
+			<option value="visits">Visits</option>
+			<option value="clicks">Clicks</option>
+			<option value="conversions">Conversions</option>
+			<option value="revenue">Revenue</option>
+			<option value="cost">Cost</option>
+			<option value="profit">Profit</option>
+			<option value="cpv">CPV</option>
+			<option value="ctr">CTR</option>
+			<option value="cr">CR</option>
+			<option value="cv">CV</option>
+			<option value="roi">ROI</option>
+			<option value="epv">EPV</option>
+			<option value="epc">EPC</option>
+			<option value="ap">AP</option>
+			<option value="lastOptimized">Last Optimized</option>
+		</select>
+	</div>
+	<div class="col-md-2">
+		<select class="form-control operator">
+			<option value="-1">&nbsp;&nbsp;</option>			
+			<option value="lt">&lt;</option>			
+			<option value="leq">&leq;</option>
+			<option value="geq">&geq;</option>
+			<option value="gt">&gt;</option>	
+		</select>
+	</div>
+		<div class="col-md-3" ng-class="{}">
+		<select class="form-control operand">
+			<option value="-1">--Select One--</option>
+			<option value="visits">Visits</option>
+			<option value="clicks">Clicks</option>
+			<option value="conversions">Conversions</option>
+			<option value="revenue">Revenue</option>
+			<option value="cost">Cost</option>
+			<option value="profit">Profit</option>
+			<option value="cpv">CPV</option>
+			<option value="ctr">CTR</option>
+			<option value="cr">CR</option>
+			<option value="cv">CV</option>
+			<option value="roi">ROI</option>
+			<option value="epv">EPV</option>
+			<option value="epc">EPC</option>
+			<option value="ap">AP</option>			
+			<option value="numeric">Numeric Value</option>
+		</select>		
+	</div>	
+	<div class="col-md-3">
+		<input type="text" class="numericVal form-control" >
+	</div>
+	<div class="col-md-1" style="padding-left: 0px;">
+		<span class="glyphicon glyphicon-trash handCursor" style="font-size: 1.3em;line-height: 1.6em;"></span>
+	</div>
+</div>

@@ -1,0 +1,177 @@
+<?php
+?>
+<div class="container-fluid">
+<hr>
+<div class="row">
+	<div class="col-md-2">
+	<label for="itemsCount">Items Count on one page</label>
+		<select ng-model="itemsCount" class="form-control" ng-init="itemsCount = 10">
+			<option value="5">5</option>
+			<option value="10">10</option>
+			<option value="20">20</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+			<option value="500">500</option>
+			<option value="1000">1000</option>
+		</select>
+	</div>
+	<div class="col-md-7">
+		&nbsp;	
+	</div>
+	<div class="col-md-3">
+		<label>Campaign Search</label>
+		<input ng-model="q" id="search" class="form-control" placeholder="Search in the table">	
+	</div>
+</div>
+
+<table border="1" cg-busy="{promise: promise, templateUrl: '', backdrop: true, message: 'Please wait'}"
+datatable="ng" class="row-border hover" id="campaignTable">
+	<thead>
+		<tr>
+			<th></th>
+			<th ng-click="changeSortOrder('campaignName')" class="handCursor" ng-class="{reverse:reverse}">Campaign
+			<span class="sortorder" ng-show="orderByCol === 'campaignName'" ng-class="{reverse:reverse}"></span>
+			</th>
+			<th ng-click="changeSortOrder('campaignId')" class="handCursor" ng-class="{reverse:reverse}">Campaign ID
+			<span class="sortorder" ng-show="orderByCol === 'campaignId'" ng-class="{reverse:reverse}"></span>
+			</th>
+			<th ng-click="changeSortOrder('visits')" class="handCursor" ng-class="{reverse:reverse}">Visits
+			<span class="sortorder" ng-show="orderByCol === 'visits'" ng-class="{reverse:reverse}"></span>
+			</th>
+			<th ng-click="changeSortorder('clicks')" class="handCursor" ng-class="{reverse:reverse}">Clicks
+			<span class="sortorder" ng-show="orderByCol === 'clicks'" ng-class="{reverse:reverse}"></span>
+			</th>
+			<th ng-click="changeSortOrder('conversions')" class="handCursor" ng-class="{reverse:reverse}">Conversions
+			<span class="sortorder" ng-show="orderByCol === 'conversions'" ng-class="{reverse:reverse}"></span>
+			</th>
+			<th ng-click="changeSortOrder('revenue')" class="handCursor" ng-class="{reverse:reverse}">Revenue
+			<span class="sortorder" ng-show="orderByCol === 'revenue'" ng-class="{reverse:reverse}"></span>
+			</th>
+			<th ng-click="changeSortOrder('cost')" class="handCursor" ng-class="{reverse:reverse}">Cost
+			<span class="sortorder" ng-show="orderByCol === 'cost'" ng-class="{reverse:reverse}"></span>
+			</th>
+			<th ng-click="changeSortOrder('profit')" class="handCursor" ng-class="{reverse:reverse}">Profit
+			<span class="sortorder" ng-show="orderByCol === 'profit'" ng-class="{reverse:reverse}"></span>
+			</th> 
+			<th ng-click="changeSortOrder('cpv')" class="handCursor" ng-class="{reverse:reverse}">CPV
+			<span class="sortorder" ng-show="orderByCol === 'cpv'" ng-class="{reverse:reverse}"></span>
+			</th>		
+			<th ng-click="changeSortOrder('ctr')" class="handCursor" ng-class="{reverse:reverse}">CTR
+			<span class="sortorder" ng-show="orderByCol === 'ctr'" ng-class="{reverse:reverse}"></span>
+			</th>
+			<th ng-click="changeSortOrder('cr')" class="handCursor" ng-class="{reverse:reverse}">CR
+			<span class="sortorder" ng-show="orderByCol === 'cr'" ng-class="{reverse:reverse}"></span>
+			</th>
+			<th ng-click="changeSortOrder('cv')" class="handCursor" ng-class="{reverse:reverse}">CV
+			<span class="sortorder" ng-show="orderByCol === 'cv'" ng-class="{reverse:reverse}"></span>
+			</th>
+			<th ng-click="changeSortOrder('roi')" class="handCursor" ng-class="{reverse:reverse}">ROI
+			<span class="sortorder" ng-show="orderByCol === 'roi'" ng-class="{reverse:reverse}"></span>
+			</th>
+			<th ng-click="changeSortOrder('epv')" class="handCursor" ng-class="{reverse:reverse}">EPV
+			<span class="sortorder" ng-show="orderByCol === 'epv'" ng-class="{reverse:reverse}"></span>
+			</th>
+			<th ng-click="changeSortOrder('epc')" class="handCursor" ng-class="{reverse:reverse}">EPC
+			<span class="sortorder" ng-show="orderByCol === 'epc'" ng-class="{reverse:reverse}"></span>
+			</th>
+			<th ng-click="changeSortOrder('ap')" class="handCursor" ng-class="{reverse:reverse}">AP
+			<span class="sortorder" ng-show="orderByCol === 'ap'" ng-class="{reverse:reverse}"></span>
+			</th>			
+		</tr>
+	</thead>
+	<tbody>
+		<tr context="context1" class="handCursor" dir-paginate="campaign in campaigns|filter:q|itemsPerPage: itemsCount | orderBy:orderByCol:reverse" 
+			data-id="{{campaign.campaignId}}">
+			<td>
+				<span class="filled">					
+					<span class="flag glyphicon glyphicon-flag {{campaign.flag}}" ng-class="{hidden: !campaign.isFlag}">					
+					</span>
+					<span class="notes glyphicon glyphicon-tags" ng-class="{hidden: !campaign.isNotes}">									
+					</span>
+					<span class="hidden">
+						{{campaign.notes}}
+					</span>
+				</span>
+			</td>
+			<td data-toggle="tooltip" title="{{campaign.campaignName}}">{{campaign.campaignName}}</td>
+			<td data-toggle="tooltip" title="{{campaign.campaignId}}">{{campaign.campaignId}}</td>
+			<td data-toggle="tooltip" title="{{campaign.visits}}">{{campaign.visits}}</td>
+			<td data-toggle="tooltip" title="{{campaign.clicks}}">{{campaign.clicks}}</td>
+			<td data-toggle="tooltip" title="{{campaign.conversions}}">{{campaign.conversions}}</td>
+			<td data-toggle="tooltip" title="{{campaign.revenue}}">{{campaign.revenue}}</td>
+			<td data-toggle="tooltip" title="{{campaign.cost}}">{{campaign.cost}}</td>
+			<td data-toggle="tooltip" title="{{campaign.profit}}">{{campaign.profit}}</td>
+			<td data-toggle="tooltip" title="{{campaign.cpv}}">{{campaign.cpv}}</td>
+			<td data-toggle="tooltip" title="{{campaign.ctr}}">{{campaign.ctr}}</td>
+			<td data-toggle="tooltip" title="{{campaign.cr}}">{{campaign.cr}}</td>
+			<td data-toggle="tooltip" title="{{campaign.cv}}">{{campaign.cv}}</td>
+			<td data-toggle="tooltip" title="{{campaign.roi}}">{{campaign.roi}}</td>
+			<td data-toggle="tooltip" title="{{campaign.epv}}">{{campaign.epv}}</td>
+			<td data-toggle="tooltip" title="{{campaign.epc}}">{{campaign.epc}}</td>
+			<td data-toggle="tooltip" title="{{campaign.ap}}">{{campaign.ap}}</td>			
+		</tr>
+	</tbody>
+</table>
+<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="templates/dirPagination.tpl.html"></dir-pagination-controls>
+
+ <ul id="context1" class="dropdown-menu">
+      <li><a class="handCursor" ng-click="report()">Report</a></li>      
+      <li><a class="handCursor" ng-click="notes($event)">Add Notes</a></li>
+      <li class="divider"></li>
+      <li><a class="handCursor" ng-click="flag('blue')">Blue Flag &nbsp;&nbsp;<span class="glyphicon glyphicon-flag text-primary pull-right" style="font-size: 1.5em;"></span></a></li>
+      <li><a class="handCursor" ng-click="flag('red')">Red Flag &nbsp;&nbsp;<span class="glyphicon glyphicon-flag text-danger pull-right" style="font-size: 1.5em;"></span></a></li>
+      <li><a class="handCursor" ng-click="flag('green')">Green Flag &nbsp;&nbsp;<span class="glyphicon glyphicon-flag text-success pull-right" style="font-size: 1.5em;"></span></a></li>
+      <li><a class="handCursor" ng-click="flag('brown')">Brown Flag &nbsp;&nbsp;<span class="glyphicon glyphicon-flag text-warning pull-right" style="font-size: 1.5em;"></span></a></li>      
+    </ul>
+</div>
+
+<div class="modal fade" id="notesContainer">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Campaign <span id="notesCampaignId"></span></h4>
+			</div>
+			<div class="modal-body">
+				<textarea class="form-control" placeholder="Enter Notes about the campaign here" id="notesText"></textarea>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
+<style type="text/css">
+	table{
+		width: 100%;
+	}
+	thead{
+		background: #337ab7;
+		color: white;
+	}
+	th, tr{
+		width: 5%;
+		overflow: hidden;
+		text-align: center;		
+	}
+	
+	th:nth-child(11), tr:nth-child(11),th:nth-child(12), tr:nth-child(12),th:nth-child(13), tr:nth-child(13),
+	th:nth-child(14), tr:nth-child(14),th:nth-child(15), tr:nth-child(15),th:nth-child(16), tr:nth-child(16){
+		width: 3%;
+	}
+	th:nth-child(1), tr:nth-child(1){
+		width: 4%;
+		overflow: hidden;
+	}
+	th:nth-child(2), tr:nth-child(2){
+		width: 25%;
+		overflow: hidden;
+	}
+	th:nth-child(3), tr:nth-child(3){
+		width: 15%;
+		overflow: hidden;
+	}	
+	
+	
+</style>
